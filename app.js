@@ -453,16 +453,18 @@ function App() {
       
       objects.push(CreateTorus([5.0, 0.0, 10.0], 1.0, 0.5));
       
+      
       objects.push(CreateSphere([0.0, 0.0, 0.0], 5.0));
       objects.push(CreateSphere([8.0, 0.0, 2.0], 0.1));
       objects.push(CreateDiamond3D([0.0, 0.0, -10.0]));
       objects.push(CreateSphere([0.0, 0.0, 1000], 500.0));
+      objects.push(CreateTorus([50.0, 100.0, 3000.0], 1000.0, 600.0));
       objects.push(CreateSphere([0.0, -100.0, 450], 10.0));
       objects.push(CreateSphere([0.0, -70.0, 460], 5.0));
       objects.push(CreateDiamond3D([100, 0, 0], 40.0));
       
-      objects.push(CreateSphere([20.0, 20.0, -200.0], 4.0));
-      objects.push(CreateSphere([30.0, 20.0, -202.0], 0.5));
+      objects.push(CreateSphere([-180.0, 20.0, -200.0], 8.0));      
+      objects.push(CreateTorus([-180.0, 20.0, -200.0], 30.0, 20.0));
       objects.push(CreateCuboid([-110.0, -70.0, -202.0], 50, 50, 50));
       objects.push(CreateSphere([6000.0, -11000.0, -2000], 7000.0));
    } else {
