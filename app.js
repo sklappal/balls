@@ -675,8 +675,8 @@ function App() {
       // Shift
       speed *= 10;
     }
-    if (currentlyPressedKeys[173]) {
-      // -
+    if (currentlyPressedKeys[88]) {
+      // x
       speed *= 100;
     }
 
