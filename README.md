@@ -11,10 +11,10 @@ Instructions
 ============
 
 - WASDQE to move (press shift to move faster, 'X' to go warpspeed)
-- Arrows or mouse to rotate camera (keep space pressed to enable mouse)
+- Arrows or mouse to rotate camera (press space)
 - 'R' to reset to initial state
 - TFGH to rotate objects
-- Space to enable mouse
+- Space to toggle mouse control
 - IJKL to rotate directional light ("sun")
 - 'N' cycle camera through objects
 - 'B' center camera on current object 

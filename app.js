@@ -162,7 +162,6 @@ function App() {
    var mouseY;
    var sensitivity = 0.01;
    
-   
    Reset();
     
   function Move(fwdAmount, sideAmount, upAmount) {
@@ -425,7 +424,11 @@ function App() {
       // z
       drawTriangles = !drawTriangles;
     }
-    
+        
+    if (event.keyCode == 32) {
+      // space
+      disableMouseRotate = !disableMouseRotate;
+    }
   }
 
   function handleKeyUp(event) {
@@ -764,11 +767,6 @@ function App() {
     if (currentlyPressedKeys[39]) {
       // RIGHT
       yawRate = -rotSpeed;
-    }
-    disableMouseRotate = true;
-    if (currentlyPressedKeys[32]) {
-      // space
-      disableMouseRotate = false;
     }
   }
   
