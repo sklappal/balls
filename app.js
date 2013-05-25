@@ -246,7 +246,7 @@ function App() {
     mouseX = Get3dCanvas().width * 0.5;;
     mouseY = Get3dCanvas().height * 0.5;
     
-    disableMouseRotate = false;
+    disableMouseRotate = true;
     
   }
   
@@ -765,12 +765,12 @@ function App() {
       // RIGHT
       yawRate = -rotSpeed;
     }
-    disableMouseRotate = false;
+    disableMouseRotate = true;
     if (currentlyPressedKeys[32]) {
       // space
       xSpeed = 0.0;
       ySpeed = 0.0;
-      disableMouseRotate = true;
+      disableMouseRotate = false;
     }
   }
   

@@ -10,11 +10,11 @@ http://koti.kapsi.fi/~sklappal/balls/
 Instructions
 ============
 
-- WASDQE to move (press shift to move faster, 'x' to warpspeed)
-- Arrows or mouse rotate camera
+- WASDQE to move (press shift to move faster, 'X' to go warpspeed)
+- Arrows or mouse to rotate camera (keep space pressed to enable mouse)
 - 'R' to reset to initial state
 - TFGH to rotate objects
-- Space to stop object rotation and disable mouse
+- Space to enable mouse (and stop object rotation)
 - IJKL to rotate directional light ("sun")
 - 'N' cycle camera through objects
 - 'B' center camera on current object 
