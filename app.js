@@ -768,8 +768,6 @@ function App() {
     disableMouseRotate = true;
     if (currentlyPressedKeys[32]) {
       // space
-      xSpeed = 0.0;
-      ySpeed = 0.0;
       disableMouseRotate = false;
     }
   }

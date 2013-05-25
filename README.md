@@ -14,7 +14,7 @@ Instructions
 - Arrows or mouse to rotate camera (keep space pressed to enable mouse)
 - 'R' to reset to initial state
 - TFGH to rotate objects
-- Space to enable mouse (and stop object rotation)
+- Space to enable mouse
 - IJKL to rotate directional light ("sun")
 - 'N' cycle camera through objects
 - 'B' center camera on current object 
