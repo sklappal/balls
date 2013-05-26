@@ -21,5 +21,6 @@ Instructions
 - '1' toggle "flashlight"
 - '2' toggle directional light
 - '3' toggle ambient light
+- '4' toggle specular highlights
 - 'z' toggle wireframe rendering
 - '+', '-' adjust FOV

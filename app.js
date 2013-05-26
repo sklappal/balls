@@ -85,6 +85,7 @@ function App() {
     shaderProgram.usePositionalLight = gl.getUniformLocation(shaderProgram, "usePositionalLight");
     shaderProgram.useDirectionalLight = gl.getUniformLocation(shaderProgram, "useDirectionalLight");
     shaderProgram.useAmbientLight = gl.getUniformLocation(shaderProgram, "useAmbientLight");
+    shaderProgram.useSpecularLight = gl.getUniformLocation(shaderProgram, "useSpecularLight");
   }
   
   
@@ -121,6 +122,7 @@ function App() {
     gl.uniform1i(shaderProgram.usePositionalLight, usePositionalLight);
     gl.uniform1i(shaderProgram.useDirectionalLight, useDirectionalLight);
     gl.uniform1i(shaderProgram.useAmbientLight, useAmbientLight);
+    gl.uniform1i(shaderProgram.useSpecularLight, useSpecularLight)
   }
    
    var xSpeed;
@@ -156,6 +158,7 @@ function App() {
    var usePositionalLight;
    var useDirectionalLight;
    var useAmbientLight;
+   var useSpecularLight;
    var drawtriangles;
    
    var mouseX;
@@ -240,6 +243,7 @@ function App() {
     usePositionalLight = false;
     useDirectionalLight = true;
     useAmbientLight = true;
+    useSpecularLight = true;
     drawTriangles = true;
     
     mouseX = Get3dCanvas().width * 0.5;;
@@ -420,6 +424,11 @@ function App() {
       useAmbientLight = !useAmbientLight;
     }
     
+    if (event.keyCode == 52) {
+      // 4
+      useSpecularLight = !useSpecularLight;
+    }
+    
     if (event.keyCode == 90) {
       // z
       drawTriangles = !drawTriangles;
@@ -438,8 +447,6 @@ function App() {
  
   
   var objects = [];
-  
-  var centerBall;
   
   var ship;
   
@@ -483,12 +490,8 @@ function App() {
       }
     }
    
-    centerBall = CreateSphere([0.0, 0.0, -0.1], 0.001);
-   
     ship = CreateShip();
     ship.rotation = mat4.identity();
-   
-    
     
     initBuffers();
   }
@@ -498,7 +501,6 @@ function App() {
       objects[i].initBuffer(gl);
     }
     
-    centerBall.initBuffer(gl);
     ship.initBuffer(gl);
     
   }
@@ -579,9 +581,7 @@ function App() {
       mat4.translate(viewMatrix, [0.0, -2.0, -50.0]);
       mat4.rotateX(viewMatrix, Math.PI / 12);
       drawObject(ship);
-    } else {
-      drawObject(centerBall);
-    }
+    } 
     
     var invCamera = mat4.create();
     mat4.inverse(cam.rotation, invCamera);

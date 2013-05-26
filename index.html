@@ -23,6 +23,7 @@ uniform vec3 uDirectionalColor;
 uniform bool usePositionalLight;
 uniform bool useAmbientLight;
 uniform bool useDirectionalLight;
+uniform bool useSpecularLight;
 
 varying vec3 vNormal;
 varying vec4 vertexPosInWorld;
@@ -38,24 +39,45 @@ void main(void) {
   
   vec3 directionalLight = uDirectionalColor * directionalLightWeighting;
   
+  float phongSpecularExponent = 17.0;
+  
+  float specularWeight = pow(directionalLightWeighting, phongSpecularExponent);
+  
+  if (!useSpecularLight) {
+    specularWeight = 0.0;    
+  }
+  
+  vec3 specularLight = vec3(1.0, 1.0, 1.0) * specularWeight;
+  
   vec3 pos2frag = -vertexPosInWorld.xyz;
   float dist = sqrt(dot(pos2frag, pos2frag));
   pos2frag = normalize(pos2frag);
   
   float angularComponent = 0.0;
   float coneCos = dot(pos2frag, lookVector);
+  float positionalSpecularWeight = 0.0;
   if ( coneCos > 0.95 ) {
-    float smoothCoeff = min(1.0, (coneCos - 0.95)*10.0); 
-    angularComponent = max(dot(vNormal, lookVector) * smoothCoeff, 0.0);
+    float smoothCoeff = min(1.0, (coneCos - 0.95) * 10.0);
+    float lookCos = dot(vNormal, lookVector);
+    angularComponent = max(lookCos * smoothCoeff, 0.0);
+    positionalSpecularWeight = pow(lookCos, phongSpecularExponent) * smoothCoeff;
   }
   
-  float positionalLightWeighting = angularComponent * min(1.0, (50.0 / (dist + 1.0)));
+  float distanceAttenuation = min(1.0, (50.0 / (dist + 1.0)));  
+  float positionalLightWeighting = angularComponent * distanceAttenuation;
+  positionalSpecularWeight = positionalSpecularWeight * distanceAttenuation; 
   
   if (!usePositionalLight) {
     positionalLightWeighting = 0.0;
+    positionalSpecularWeight = 0.0;
+  }
+  
+  if (!useSpecularLight) {
+    positionalSpecularWeight = 0.0;
   }
   
   vec3 positionalLight = vec3(0.0, 0.0, 1.0) * positionalLightWeighting;
+  vec3 positionalSpecular = vec3(0.0, 1.0, 1.0) * positionalSpecularWeight;
   
   vec3 ambient = vec3(0.1, 0.0, 0.05);
   
@@ -63,7 +85,7 @@ void main(void) {
     ambient = ambient * 0.0;
   }
   
-  vec3 color = directionalLight + positionalLight + ambient; 
+  vec3 color = specularLight + directionalLight + positionalLight + positionalSpecular + ambient; 
   
   gl_FragColor = vec4(color, 1.0); 
 }
@@ -77,9 +99,7 @@ void main(void) {
   
   uniform vec3 uLightingDirection;  
   uniform vec3 uDirectionalColor;
-  
-  uniform bool usePositionalLight;
-  
+    
   uniform mat4 uModelMatrix;
   uniform mat4 uPMatrix;
   uniform mat3 uNormalMatrix;
