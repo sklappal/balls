@@ -7,6 +7,8 @@ Playable at
 
 http://koti.kapsi.fi/~sklappal/balls/
 
+Note: Requires a WebGL -enabled browser.
+
 Instructions
 ============
 
