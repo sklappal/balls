@@ -26,3 +26,16 @@ Instructions
 - '4' toggle specular highlights
 - 'z' toggle wireframe rendering
 - '+', '-' adjust FOV
+<<<<<<< HEAD
+=======
+
+
+Technical
+============
+
+- All geometry is procedurally generated. Most of the surfaces are randomly perturbated to have a more organic feel. 
+- Surface normals are defined per-vertex and are weighted by the triangle areas that meet at the vertex. This makes the edges of the cubes seem a bit odd.
+- Lighting is based on Phong-shading. That is, lighting is calculated per-fragment (as opposed to per-vertex or per-triangle) and the surface normals are interpolated for the non-vertex points of the triangles. 
+
+ 
+>>>>>>> 365ede2dcb1ea842973e0ae4b43e867b30c940ed
