@@ -1,7 +1,7 @@
 Balls
 ===========
 
-WebGL eperimentation. Using HTML5 Canvas with JavaScript. 
+WebGL experimentation. Using HTML5 Canvas with JavaScript. 
 
 Playable at
 
