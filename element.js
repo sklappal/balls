@@ -138,6 +138,7 @@
   function element(position, mesh) {
     this.position = position;
     this.mesh = mesh;
+    this.drawWireFrame = false;
     
     this.initBuffer = function(gl) {
       this.bufferContainer = new BufferContainer(mesh, gl);  

@@ -160,7 +160,7 @@ function App() {
    var useDirectionalLight;
    var useAmbientLight;
    var useSpecularLight;
-   var drawtriangles;
+   var drawWireFrameOverride;
    
    var mouseX;
    var mouseY;
@@ -245,7 +245,7 @@ function App() {
     useDirectionalLight = true;
     useAmbientLight = true;
     useSpecularLight = true;
-    drawTriangles = true;
+    drawWireFrameOverride = false;
     
     mouseX = Get3dCanvas().width * 0.5;;
     mouseY = Get3dCanvas().height * 0.5;
@@ -314,14 +314,9 @@ function App() {
   }
    
   function checkCollision() {
-    var cont = false;
     for (var i = 0; i < objects.length; i++) {
-      if (objects[i].Contains(GetPosition())) {
-        cont = true;
-        break;
-      }
+      objects[i].drawWireFrame = objects[i].Contains(GetPosition());
     }
-    drawTriangles = !cont;
   }
    
   function drawHud() {
@@ -444,7 +439,7 @@ function App() {
     
     if (event.keyCode == 90) {
       // z
-      drawTriangles = !drawTriangles;
+      drawWireFrameOverride = !drawWireFrameOverride;
     }
         
     if (event.keyCode == 32) {
@@ -537,12 +532,12 @@ function App() {
     mat4.multiply(modelMatrix, obRot);
     setMatrixUniforms();
     
-    if (drawTriangles) {
-      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, object.bufferContainer.triangleIndexBuffer);
-      gl.drawElements(gl.TRIANGLES, object.bufferContainer.triangleIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-    } else {
+    if (drawWireFrameOverride || object.drawWireFrame) {
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, object.bufferContainer.wireIndexBuffer);
       gl.drawElements(gl.LINES, object.bufferContainer.wireIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+    } else {
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, object.bufferContainer.triangleIndexBuffer);
+      gl.drawElements(gl.TRIANGLES, object.bufferContainer.triangleIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
     } 
     
     modelPopMatrix();
