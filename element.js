@@ -143,6 +143,12 @@
       this.bufferContainer = new BufferContainer(mesh, gl);  
     }
     
+    this.Contains = function(vWorld) {
+      var trans = vec3.create();
+      vec3.subtract(this.position, vWorld, trans);
+      return AABBContainsV(this.mesh.boundingBox(), trans);
+    }
+    
   }
 
   function trianglemesh(vertices, indices) {
@@ -206,16 +212,23 @@
         var maxz = this.vertices[0][2];
         for (var i = 1; i < this.vertices.length; i++) {
           minx = Math.min(minx, this.vertices[i][0]);
-          minx = Math.min(maxx, this.vertices[i][0]);
-          minx = Math.min(miny, this.vertices[i][1]);
-          minx = Math.min(maxy, this.vertices[i][1]);
-          minx = Math.min(minz, this.vertices[i][2]);
-          minx = Math.min(maxz, this.vertices[i][2]);
+          maxx = Math.max(maxx, this.vertices[i][0]);
+          miny = Math.min(miny, this.vertices[i][1]);
+          maxy = Math.max(maxy, this.vertices[i][1]);
+          minz = Math.min(minz, this.vertices[i][2]);
+          maxz = Math.max(maxz, this.vertices[i][2]);
         }
-        this.bbCache = { minimums : [minx, miny, minz], maximums : [maxx, maxy, maxz] };
+        this.bbCache = { min : [minx, miny, minz], max : [maxx, maxy, maxz] };
       }
+      
       return this.bbCache;
     }
+  }
+  
+  function AABBContainsV(aabb, v) {
+    return (v[0] >= aabb.min[0] && v[0] <= aabb.max[0]) &&
+      (v[1] >= aabb.min[1] && v[1] <= aabb.max[1]) &&
+      (v[2] >= aabb.min[2] && v[2] <= aabb.max[2]);
   }
   
   function identity(v) {

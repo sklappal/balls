@@ -86,6 +86,7 @@ function App() {
     shaderProgram.useDirectionalLight = gl.getUniformLocation(shaderProgram, "useDirectionalLight");
     shaderProgram.useAmbientLight = gl.getUniformLocation(shaderProgram, "useAmbientLight");
     shaderProgram.useSpecularLight = gl.getUniformLocation(shaderProgram, "useSpecularLight");
+    
   }
   
   
@@ -122,7 +123,7 @@ function App() {
     gl.uniform1i(shaderProgram.usePositionalLight, usePositionalLight);
     gl.uniform1i(shaderProgram.useDirectionalLight, useDirectionalLight);
     gl.uniform1i(shaderProgram.useAmbientLight, useAmbientLight);
-    gl.uniform1i(shaderProgram.useSpecularLight, useSpecularLight)
+    gl.uniform1i(shaderProgram.useSpecularLight, useSpecularLight);
   }
    
    var xSpeed;
@@ -312,6 +313,16 @@ function App() {
     lastTime = timeNow;
   }
    
+  function checkCollision() {
+    var cont = false;
+    for (var i = 0; i < objects.length; i++) {
+      if (objects[i].Contains(GetPosition())) {
+        cont = true;
+      }
+    }
+    drawTriangles = !cont;
+  }
+   
   function drawHud() {
         
     var ro = function(value) {
@@ -359,6 +370,7 @@ function App() {
     drawScene();
     drawHud();
     animate();
+    checkCollision();
   }
   
   function moduloPi(val) {

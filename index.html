@@ -101,12 +101,10 @@ void main(void) {
 </script>
 
 <script id="shader-vs" type="x-shader/x-vertex">
+  
   attribute vec3 aVertexPosition;
   attribute vec3 aVertexNormal;
-  
-  uniform vec3 uLightingDirection;  
-  uniform vec3 uDirectionalColor;
-    
+      
   uniform mat4 uModelMatrix;
   uniform mat4 uPMatrix;
   uniform mat3 uNormalMatrix;
@@ -118,12 +116,16 @@ void main(void) {
   
   void main(void) {
     mat4 MVMatrix = uViewMatrix * uModelMatrix;
-    gl_Position = uPMatrix * MVMatrix * vec4(aVertexPosition, 1.0);
+    vec4 pos =  uPMatrix * MVMatrix * vec4(aVertexPosition, 1.0);
+    
+    vNormal = uNormalMatrix * aVertexNormal;
     
     vertexPosInWorld = MVMatrix * vec4(aVertexPosition, 1.0);
     
-    vNormal = uNormalMatrix * aVertexNormal;
     lookVector = vec3(0.0, 0.0, 1.0);
+    
+    gl_Position =  pos;
+    
   }
 </script>
 
