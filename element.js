@@ -361,13 +361,10 @@
       ); 
     }
     
-    
-    function CreateTorus(position, radius1, radius2) {
-      
+    // Accepts a two slot function where both parameters run from 0 to 2pi. Excpects a 3d vector as return value.
+    function CreateParameterizedSurface(position, width, height, parameterization) {
       var vertices = [];
       
-      var width = 32.0;
-      var height = 16.0;
       var twoPi = 2.0 * Math.PI;
       
       
@@ -375,14 +372,15 @@
         for (var i = 0; i < width; i++) {
           var theta = twoPi * (i / width);
           var phi = twoPi * (j / height);
-          vertices.push((radius1 + radius2 * Math.cos(phi)) * Math.cos(theta));
-          vertices.push((radius1 + radius2 * Math.cos(phi)) * Math.sin(theta));
-          vertices.push(radius2 * Math.sin(phi));
+          
+          var pos = parameterization(theta, phi);
+          vertices.push(pos[0]);
+          vertices.push(pos[1]);
+          vertices.push(pos[2]);
         }
       }
       
       var indices = [];
-      
       
       for (var j = 0; j < height; j++) {
         for (var i = 0; i < width; i++) {
@@ -405,6 +403,41 @@
       }
       
       return new element(position, new trianglemesh(vertices, indices));
+    }
+    
+    function CreateTorus(position, radius1, radius2) {
+      
+      return CreateParameterizedSurface(position, 32, 32, function(theta, phi) {
+          var ret = [];
+          var r2 = (Math.sin(theta)*0.5 + 0.6)*radius2;          
+          ret.push((radius1 + r2 * Math.cos(phi)) * Math.cos(theta));
+          ret.push((radius1 + r2 * Math.cos(phi)) * Math.sin(theta));
+          ret.push(r2 * Math.sin(phi));
+          return ret;
+      });
+      
+    }
+    
+    function CreateKleinBottle(position, radius) {
+          
+      return CreateParameterizedSurface(position, 64, 64, function(v, u) {
+        u /= Math.PI;
+        
+        var cosu = Math.cos(u);
+        var sinu = Math.sin(u);
+        var cosv = Math.cos(v);
+        var sinv = Math.sin(v);
+        
+        var x = - 2.0 * cosu * (3*cosv  + sinu*(-30 + 90* Math.pow(cosu,4) - 60*Math.pow(cosu, 6) + 5 * cosu*cosv));
+        var y = -1.0 * sinu * (3*cosv - 60*sinu + cosu*(-3*cosu*cosv - 48*Math.pow(cosu, 3)*cosv + 48*Math.pow(cosu, 5)*cosv + 5*cosv*sinu-5*cosu*cosu*cosv*sinu-80*Math.pow(cosu, 4)*cosv*sinu + 80*Math.pow(cosu, 6)*cosv*sinu));
+        var z = 2*(3 + 5 * cosu*sinu)*sinv;
+        var vertices = [];
+        var r = radius/15.0;
+        vertices.push(x*r);
+        vertices.push(y*r);
+        vertices.push(z*r);
+        return vertices;
+      });
       
     }
     
