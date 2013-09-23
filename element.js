@@ -421,7 +421,7 @@
     function CreateKleinBottle(position, radius) {
           
       return CreateParameterizedSurface(position, 64, 64, function(v, u) {
-        u /= Math.PI;
+        u /= 2.0;
         
         var cosu = Math.cos(u);
         var sinu = Math.sin(u);
