@@ -362,7 +362,7 @@
     }
     
     // Accepts a two slot function where both parameters run from 0 to 2pi. Excpects a 3d vector as return value.
-    function CreateParameterizedSurface(position, width, height, parameterization) {
+    function CreateParameterizedSurface(position, width, height, parameterization, createTriangles) {
       var vertices = [];
       
       var twoPi = 2.0 * Math.PI;
@@ -380,23 +380,7 @@
         }
       }
       
-      var indices = [];
-      
-      for (var j = 0; j < height; j++) {
-        for (var i = 0; i < width; i++) {
-          iPlus1 = (i+1) % width;
-          jPlus1 = (j+1) % height;
-          
-          indices.push(i + j * width);
-          indices.push(iPlus1 + j * width);
-          indices.push(i + jPlus1 * width);
-          
-          indices.push(i + jPlus1 * width);
-          indices.push(iPlus1 + j * width);
-          indices.push(iPlus1 + jPlus1 * width);
-            
-        }
-      }
+      var indices = createTriangles(width, height);
       
       for (var i = 0; i < indices.length; i++) {
         assert(indices[i] < vertices.length);
@@ -407,20 +391,48 @@
     
     function CreateTorus(position, radius1, radius2) {
       
-      return CreateParameterizedSurface(position, 32, 32, function(theta, phi) {
+      var parameterization = function(theta, phi) {
           var ret = [];
           var r2 = (Math.sin(theta)*0.5 + 0.6)*radius2;          
           ret.push((radius1 + r2 * Math.cos(phi)) * Math.cos(theta));
           ret.push((radius1 + r2 * Math.cos(phi)) * Math.sin(theta));
           ret.push(r2 * Math.sin(phi));
           return ret;
-      });
+      };
+      
+      var createTriangles = function(width, height) {
+        var indices = [];
+        for (var j = 0; j < height; j++) {
+          var jPlus1 = (j+1);
+          if (jPlus1 == height) {
+            jPlus1 = 0;
+          } 
+          for (var i = 0; i < width; i++) {
+            var iPlus1 = (i+1);
+            if (iPlus1 == width) {
+              iPlus1 = 0;
+            }
+            
+            indices.push(i + j * width);
+            indices.push(iPlus1 + j * width);
+            indices.push(i + jPlus1 * width);
+            
+            indices.push(iPlus1 + j * width);
+            indices.push(iPlus1 + jPlus1 * width);
+            indices.push(i + jPlus1 * width);
+              
+          }
+        }
+        return indices;
+      }
+      
+      return CreateParameterizedSurface(position, 32, 32, parameterization, createTriangles);
       
     }
     
     function CreateKleinBottle(position, radius) {
           
-      return CreateParameterizedSurface(position, 64, 64, function(v, u) {
+       var parameterization = function(v, u) {
         u /= 2.0;
         
         var cosu = Math.cos(u);
@@ -437,7 +449,58 @@
         vertices.push(y*r);
         vertices.push(z*r);
         return vertices;
-      });
+      };
+      
+      var createTriangles = function (width, height) {
+        indices = [];
+        for (var j = 0; j < height-1; j++) {
+          var jPlus1 = (j+1);
+          if (jPlus1 == height) {
+            jPlus1 = 0;
+          } 
+          for (var i = 0; i < width; i++) {
+            var iPlus1 = (i+1);
+            if (iPlus1 == width) {
+              iPlus1 = 0;
+            }
+            
+            indices.push(i + j * width);
+            indices.push(iPlus1 + j * width);
+            indices.push(i + jPlus1 * width);
+            
+            indices.push(iPlus1 + j * width);
+            indices.push(iPlus1 + jPlus1 * width);
+            indices.push(i + jPlus1 * width);
+              
+          }
+        }
+        
+        var j = height - 1;
+        var jPlus1 = 0;
+        
+        for (var i = 0; i < width; i++) {
+          var iPlus1 = (i+1);
+          if (iPlus1 == width) {
+            iPlus1 = 0;
+          }
+          // Rotate by half a circle (width/2) and then glue vertices in opposite order
+          // This was just guessed, but the parameterization seems to rotate the sides by pi
+          var mirrorI =  (width - i - 1 + width/2) % width;
+          var mirrorIPlus1 = (width - i + width/2) % width;
+          
+          indices.push(i + j * width);
+          indices.push(iPlus1 + j * width);
+          indices.push(mirrorI + jPlus1 * width);
+            
+          indices.push(i + j * width);
+          indices.push(mirrorI + jPlus1 * width);
+          indices.push(mirrorIPlus1 + jPlus1 * width);
+        }
+        return indices;
+      }
+          
+          
+      return CreateParameterizedSurface(position, 64, 64, parameterization, createTriangles);
       
     }
     
